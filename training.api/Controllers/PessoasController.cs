@@ -17,7 +17,7 @@ namespace training.api.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Pessoa>> GetAll()
         {
-            return context.Pessoas;
+            return Ok(context.Pessoas);
         }
     }
 }
