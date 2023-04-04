@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace training.api.Model
 {
@@ -21,6 +22,7 @@ namespace training.api.Model
         public long IdPessoa { get; set; }
 
         [ForeignKey(nameof(IdPessoa))]
+        [JsonIgnore]
         public virtual Pessoa Pessoa { get; set; }
     }
 }
