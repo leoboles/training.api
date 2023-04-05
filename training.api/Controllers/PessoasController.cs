@@ -22,7 +22,7 @@ namespace training.api.Controllers
             return Ok(context.Pessoas);
         }
 
-        [HttpGet]
+        [HttpGet("Filtro")]
         public ActionResult<IEnumerable<Pessoa>> Get(string order = "Nome", Sexo? sexo = null)
         {
             IQueryable<Pessoa> query = context.Pessoas;
