@@ -11,18 +11,20 @@ namespace training.api.Controllers
     {
         public readonly TrainingContext context;
 
-
-
         public EnderecosController(TrainingContext context)
         {
             this.context = context;
         }
+
         [HttpGet]
+
         public ActionResult<IEnumerable<Endereco>> GetAll()
         {
             return Ok(context.Enderecos);
         }
+
         [HttpPost]
+
         public ActionResult<Endereco> Create(long id, string rua, string numero, string bairro, string estado, long idpessoa)
         {
             var endereco = new Endereco()
@@ -36,31 +38,40 @@ namespace training.api.Controllers
             };
             context.Add(endereco);
             context.SaveChanges();
-            return Ok(context.Add(endereco));
+            return CreatedAtAction(nameof(Create), new { id = endereco.Id }, endereco);
         }
-
-
 
         [HttpDelete]
 
-
-
-        public ActionResult Delete(long idPessoa)
+        public ActionResult Delete(long id)
         {
-            var endereco = context.Enderecos.FirstOrDefault(p => p.IdPessoa == idPessoa);
+            var endereco = context.Enderecos.FirstOrDefault(p => p.Id == id);
             if (endereco == null)
             {
-                return BadRequest();
+                return NotFound();
             }
             context.Remove(endereco);
             context.SaveChanges();
             return Ok("Você Excluiu o endereço com Sucesso !!");
-
-
-
         }
 
+        [HttpPut]
 
-
+        public ActionResult<Endereco> Update(long id, string rua, string numero, string bairro, string estado, long idpessoa)
+        {
+            var endereco = context.Enderecos.FirstOrDefault(p => p.Id == id);
+            if (endereco == null)
+            {
+                return NotFound();
+            }
+            endereco.Rua = rua.Trim();
+            endereco.Numero = numero.Trim();
+            endereco.Bairro = bairro.Trim();
+            endereco.Estado = estado.Trim();
+            endereco.IdPessoa = idpessoa;
+            context.Update(endereco);
+            context.SaveChanges();
+            return Ok(endereco);
+        }
     }
 }
