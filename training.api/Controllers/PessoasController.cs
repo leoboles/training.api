@@ -21,16 +21,25 @@ namespace training.api.Controllers
         {
             return Ok(context.Pessoas);
         }
-        [HttpGet("Nome")]
-        public ActionResult<IEnumerable<Pessoa>> Get()
+
+        [HttpGet]
+        public ActionResult<IEnumerable<Pessoa>> Get(string order = "Nome", Sexo? sexo = null)
         {
-            return Ok(context.Pessoas.OrderBy(p => p.Nome));
+            IQueryable<Pessoa> query = context.Pessoas;
+
+            if (sexo != null)
+            {
+                query = query.Where(p => p.Sexo == sexo);
+            }
+
+            if (order == "Nome")
+            {
+                query = query.OrderBy(p => p.Nome);
+            }
+
+            return Ok(query);
         }
-        [HttpGet("Sexo")]
-        public ActionResult<IEnumerable<Pessoa>> GetResult(Sexo sexo)
-        {
-            return Ok(context.Pessoas.Where(p => p.Sexo == sexo));
-        }
+
         [HttpGet("{id}")]
         public ActionResult<Pessoa> Get(long id)
         {
@@ -41,6 +50,7 @@ namespace training.api.Controllers
             } 
             return Ok(pessoa);
         }
+
         [HttpPost]
         public ActionResult<Pessoa> Create(long id, string nome, string telefone, Sexo sexo) 
         {
@@ -57,6 +67,7 @@ namespace training.api.Controllers
 
             return CreatedAtAction(nameof(Create), new { id = pessoa.Id}, pessoa);
         }
+
         [HttpDelete]
         public ActionResult Delete(long id) 
         {
@@ -71,6 +82,7 @@ namespace training.api.Controllers
 
             return Ok("Pessoa excluida com sucesso!");
         }
+
         [HttpPut("{id}")]
         public ActionResult<Pessoa> Update(long id, string nome, string telefone, Sexo sexo)
         {

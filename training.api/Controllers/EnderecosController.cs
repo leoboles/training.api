@@ -19,6 +19,7 @@ namespace training.api.Controllers
         {
             return Ok(context.Enderecos);
         }
+
         [HttpPost]
         public ActionResult<Endereco> Create(long id, long idPessoa, string rua, string numero, string bairro, string estado) 
         {
@@ -37,10 +38,11 @@ namespace training.api.Controllers
 
             return CreatedAtAction(nameof(Create), new { id = endereco.Id}, endereco);
         }
+
         [HttpDelete]
-        public ActionResult Delete(long idPessoa) 
+        public ActionResult Delete(long idPessoa, long id) 
         {
-            var endereco = context.Enderecos.FirstOrDefault(p => p.IdPessoa == idPessoa);
+            var endereco = context.Enderecos.FirstOrDefault(p => p.IdPessoa == idPessoa && p.Id == id);
             if (endereco == null) 
             {
                 return NotFound();
@@ -51,10 +53,11 @@ namespace training.api.Controllers
 
             return Ok("Endereço excluido com sucesso!");
         }
-        [HttpPut("{idPessoa}")]
-        public ActionResult<Endereco> Update(long id, long idPessoa, string rua, string numero, string bairro, string estado)
+
+        [HttpPut("{id}")]
+        public ActionResult<Endereco> Update(long id, string rua, string numero, string bairro, string estado)
         {
-            var endereco = context.Enderecos.FirstOrDefault(p => p.IdPessoa == idPessoa);
+            var endereco = context.Enderecos.FirstOrDefault(p => p.Id == id);
             if (endereco == null)
             {
                 return NotFound();
