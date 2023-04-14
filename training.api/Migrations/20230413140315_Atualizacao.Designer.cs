@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using training.api.Model;
 
@@ -10,9 +11,11 @@ using training.api.Model;
 namespace training.api.Migrations
 {
     [DbContext(typeof(TrainingContext))]
-    partial class TrainingContextModelSnapshot : ModelSnapshot
+    [Migration("20230413140315_Atualizacao")]
+    partial class Atualizacao
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,9 +87,6 @@ namespace training.api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("IdBanco")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("IdPessoa")
                         .HasColumnType("bigint");
 
@@ -94,8 +94,6 @@ namespace training.api.Migrations
                         .HasColumnType("real");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IdBanco");
 
                     b.HasIndex("IdPessoa");
 
@@ -251,19 +249,11 @@ namespace training.api.Migrations
 
             modelBuilder.Entity("training.api.Model.ContaBancaria", b =>
                 {
-                    b.HasOne("training.api.Model.Banco", "Banco")
-                        .WithMany()
-                        .HasForeignKey("IdBanco")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("training.api.Model.Pessoa", "Pessoa")
                         .WithMany("ContaBancaria")
                         .HasForeignKey("IdPessoa")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Banco");
 
                     b.Navigation("Pessoa");
                 });

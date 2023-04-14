@@ -52,15 +52,26 @@ namespace training.api.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Pessoa> Create(long id, string nome, string telefone, Sexo sexo) 
+        public ActionResult<Pessoa> Create(string nome, string cpf, string telefone, Sexo sexo) 
         {
             var pessoa = new Pessoa
             {
-                Id = id,
                 Nome = nome,
+                Cpf = cpf,
                 Telefone = telefone,
                 Sexo = sexo
             };
+
+            bool cpfExists = context.Pessoas.Any(p => p.Cpf == cpf);
+
+            if (Pessoa.ValidarCPF(cpf) == false)
+            {
+                return BadRequest("CPF inválido");
+            } 
+            else if (cpfExists)
+            {
+                return BadRequest("CPF já existe");
+            }
 
             context.Pessoas.Add(pessoa);
             context.SaveChanges();
