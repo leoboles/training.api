@@ -26,15 +26,26 @@ namespace training.api.Controllers
 
         [HttpPost]
 
-        public ActionResult Create(long id, string nome, string telefone, Sexo sexo)
+        public ActionResult Create(string nome, string telefone, Sexo sexo, string cpf)
         {
             Pessoa pessoa = new Pessoa();
             {
-                pessoa.Id = id;
                 pessoa.Nome = nome;
                 pessoa.Telefone = telefone;
                 pessoa.Sexo = sexo;
+                pessoa.CPF = cpf;          
             }
+            bool cpfExists = context.Pessoas.Any(p => p.CPF == cpf);
+
+            if (Pessoa.ValidarCPF(cpf) == false)
+            {
+                return BadRequest("CPF inválido");
+            }
+            else if (cpfExists)
+            {
+                return BadRequest("CPF já existe");
+            }
+
             context.Pessoas.Add(pessoa);
             context.SaveChanges();
             return CreatedAtAction(nameof(Create), new { id = pessoa.Id }, pessoa);
@@ -63,6 +74,7 @@ namespace training.api.Controllers
             {
                 return NotFound();
             }
+            pessoa.Id = id;
             pessoa.Nome = nome.Trim();
             pessoa.Telefone = telefone.Trim();
             pessoa.Sexo = sexo;
@@ -71,6 +83,7 @@ namespace training.api.Controllers
 
             return Ok(pessoa);
         }
+
     }
 }
 

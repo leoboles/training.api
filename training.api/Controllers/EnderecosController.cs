@@ -25,15 +25,14 @@ namespace training.api.Controllers
 
         [HttpPost]
 
-        public ActionResult<Endereco> Create(long id, string rua, string numero, string bairro, string estado, long idpessoa)
+        public ActionResult<Endereco> Create( string rua, string numero, string bairro, long idEstado, long idpessoa)
         {
             var endereco = new Endereco()
             {
-                Id = id,
                 Rua = rua,
                 Numero = numero,
                 Bairro = bairro,
-                Estado = estado,
+                IdEstado = idEstado,
                 IdPessoa = idpessoa
             };
             context.Add(endereco);
@@ -57,17 +56,18 @@ namespace training.api.Controllers
 
         [HttpPut]
 
-        public ActionResult<Endereco> Update(long id, string rua, string numero, string bairro, string estado, long idpessoa)
+        public ActionResult<Endereco> Update(long id, string rua, string numero, string bairro, long idEstado, long idpessoa)
         {
             var endereco = context.Enderecos.FirstOrDefault(p => p.Id == id);
             if (endereco == null)
             {
                 return NotFound();
             }
+            endereco.Id = id;
             endereco.Rua = rua.Trim();
             endereco.Numero = numero.Trim();
             endereco.Bairro = bairro.Trim();
-            endereco.Estado = estado.Trim();
+            endereco.IdEstado = idEstado;
             endereco.IdPessoa = idpessoa;
             context.Update(endereco);
             context.SaveChanges();
