@@ -22,14 +22,15 @@ namespace training.api.Controllers
         }
 
         [HttpPost]
-        public ActionResult<ContaBancaria> Create(float saldo, string agencia, string conta, long idPessoa)
+        public ActionResult<ContaBancaria> Create(float saldo, string agencia, string conta, long idPessoa, long idBanco)
         {
             var contaBancaria = new ContaBancaria
             {
                 IdPessoa = idPessoa,
+                IdBanco = idBanco,
                 Saldo = saldo,
                 Agencia = agencia,
-                Conta = conta
+                Conta = conta,
             };
 
             context.ContaBancarias.Add(contaBancaria);
@@ -56,33 +57,33 @@ namespace training.api.Controllers
         [HttpPut("{id}")]
         public ActionResult<ContaBancaria> Update(long id, float valor)
         {
-            var banco = context.ContaBancarias.FirstOrDefault(p => p.Id == id);
-            if (banco == null)
+            var contaBancaria = context.ContaBancarias.FirstOrDefault(p => p.Id == id);
+            if (contaBancaria == null)
             {
                 return NotFound();
             }
-            banco.Id = id;
-            banco.Deposito(valor);
-            context.Update(banco);
+            contaBancaria.Id = id;
+            contaBancaria.Deposito(valor);
+            context.Update(contaBancaria);
             context.SaveChanges();
-            return Ok(banco);
+            return Ok(contaBancaria);
         }
 
         [HttpPut("Pagamento")]
         public ActionResult<ContaBancaria> Update(long idProduto, long id)
         {
-            var banco = context.ContaBancarias.FirstOrDefault(p => p.Id == id);
+            var contaBancaria = context.ContaBancarias.FirstOrDefault(p => p.Id == id);
             var produto = context.Produtos.FirstOrDefault(p => p.Id == idProduto);
-            if (banco == null || produto == null)
+            if (contaBancaria == null || produto == null)
             {
                 return NotFound();
             }
-            banco.Id = id;
+            contaBancaria.Id = id;
             produto.Id = idProduto;
-            banco.Pagamento(produto);
-            context.Update(banco);
+            contaBancaria.Pagamento(produto);
+            context.Update(contaBancaria);
             context.SaveChanges();
-            return Ok(banco);
+            return Ok(contaBancaria);
         }
 
     }
