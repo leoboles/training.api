@@ -6,38 +6,24 @@ using training.api.Model;
 namespace training.api.Controllers
 {
 
-
-
     [ApiController]
     [Route("[controller]")]
     public class LojasController : ControllerBase
     {
         public readonly TrainingContext context;
 
-
-
         public LojasController(TrainingContext context)
         {
             this.context = context;
         }
 
-
-
         [HttpGet]
-
-
-
         public ActionResult<IEnumerable<Loja>> GetAll()
         {
             return Ok(context.Lojas);
         }
 
-
-
         [HttpPost]
-
-
-
         public ActionResult<Loja> Create(string nome)
         {
             var loja = new Loja()
@@ -49,12 +35,7 @@ namespace training.api.Controllers
             return CreatedAtAction(nameof(Create), new { id = loja.Id }, loja);
         }
 
-
-
         [HttpDelete]
-
-
-
         public ActionResult Delete(long id)
         {
             var loja = context.Lojas.FirstOrDefault(p => p.Id == id);
@@ -67,12 +48,7 @@ namespace training.api.Controllers
             return Ok("Você Excluiu a Loja com Sucesso !!");
         }
 
-
-
         [HttpPut]
-
-
-
         public ActionResult<Loja> Update(long id, string nome)
         {
             var loja = context.Lojas.FirstOrDefault(p => p.Id == id);
@@ -86,8 +62,5 @@ namespace training.api.Controllers
             context.SaveChanges();
             return Ok(loja);
         }
-
-
-
     }
 }

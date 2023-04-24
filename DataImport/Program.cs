@@ -40,14 +40,7 @@ namespace ExcelToSqlServer
                             string telefone = row.GetCell(1).StringCellValue;
                             string sexoStr = row.GetCell(2)?.ToString();
                             Sexo sexo;
-                            if (Enum.TryParse(sexoStr, out sexo))
-                            {
-                                // o valor da célula é um valor válido de Sexo
-                            }
-                            else
-                            {
-                                // o valor da célula não é um valor válido de Sexo
-                            }
+                            Enum.TryParse(sexoStr, out sexo);
 
                             pessoa = new Pessoa { Nome = nome, Cpf = cpf, Telefone = telefone, Sexo = sexo };
                             context.Pessoas.Add(pessoa);

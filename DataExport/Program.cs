@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.IO;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using training.api.Model;
@@ -17,11 +20,13 @@ namespace ExportDataToExcel
             {
                 using (var context = new TrainingContext(options))
                 {
-                    var pessoas = context.Pessoas.ToList();
-                    var enderecos = context.Enderecos.ToList();
+                    var pessoas = context.Pessoas
+                                         .Include(p => p.Enderecos)
+                                            .ThenInclude(p => p.Estado)
+                                         .Include(p => p.ContaBancaria)
+                                         .ToList();
                     var estados = context.Estados.ToList();
                     var cidades = context.Cidades.ToList();
-                    var contaBancarias = context.ContaBancarias.ToList();
                     var bancos = context.Bancos.ToList();
 
                     // Cria o arquivo Excel
@@ -53,7 +58,7 @@ namespace ExportDataToExcel
                         row.CreateCell(2).SetCellValue(pessoa.Telefone);
                         row.CreateCell(3).SetCellValue(pessoa.Sexo.ToString());
 
-                        var endereco = enderecos.FirstOrDefault(e => e.IdPessoa == pessoa.Id);
+                        var endereco = pessoa.Enderecos.FirstOrDefault(e => e.Id == pessoa.Id);
                         if (endereco != null)
                         {
                             row.CreateCell(4).SetCellValue(endereco.Rua);
@@ -73,7 +78,7 @@ namespace ExportDataToExcel
                             }
                         }
 
-                        var contaBancaria = contaBancarias.FirstOrDefault(c => c.IdPessoa == pessoa.Id);
+                        var contaBancaria = pessoa.ContaBancaria.FirstOrDefault(c => c.Id == pessoa.Id);
                         if (contaBancaria != null)
                         {
                             row.CreateCell(9).SetCellValue(contaBancaria.Agencia.ToString());

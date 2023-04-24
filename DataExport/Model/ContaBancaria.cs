@@ -29,7 +29,7 @@ namespace training.api.Model
         {
             if (valor <= 0)
             {
-                BadRequest();
+                throw new Exception("Valor inválido para realizar o deposito");
             }
             else
             {
@@ -48,12 +48,6 @@ namespace training.api.Model
                 throw new Exception("Saldo insuficiente para realizar a transação");
             }
         }
-
-        private void BadRequest()
-        {
-            throw new NotImplementedException();
-        }
-
 
         [ForeignKey(nameof(IdPessoa))]
         [JsonIgnore]
