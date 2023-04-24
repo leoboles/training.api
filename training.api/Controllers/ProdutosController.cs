@@ -15,14 +15,12 @@ namespace training.api.Controllers
         }
 
         [HttpGet]
-
         public ActionResult<IEnumerable<Produto>> GetAll()
         {
             return Ok(context.Produtos);
         }
 
         [HttpPost]
-
         public ActionResult<Produto> Create(string nome, float valor, long idLoja)
         {
             var produto = new Produto()
@@ -37,7 +35,6 @@ namespace training.api.Controllers
         }
 
         [HttpDelete]
-
         public ActionResult Delete(long id)
         {
             var produto = context.Produtos.FirstOrDefault(p => p.Id == id);
@@ -51,7 +48,6 @@ namespace training.api.Controllers
         }
 
         [HttpPut]
-
         public ActionResult<Produto> Update(long id, string nome , float valor, long idLoja)
         {
             var produto = context.Produtos.FirstOrDefault(p => p.Id == id);

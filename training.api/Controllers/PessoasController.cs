@@ -18,14 +18,12 @@ namespace training.api.Controllers
         }
 
         [HttpGet]
-
         public ActionResult<IEnumerable<Pessoa>> GetAll()
         {
             return Ok(context.Pessoas);
         }
 
         [HttpPost]
-
         public ActionResult Create(string nome, string telefone, Sexo sexo, string cpf)
         {
             Pessoa pessoa = new Pessoa();
@@ -52,7 +50,6 @@ namespace training.api.Controllers
         }
 
         [HttpDelete]
-
         public ActionResult Delete(long id)
         {
             var pessoa = context.Pessoas.First(p => p.Id == id);
@@ -66,7 +63,6 @@ namespace training.api.Controllers
         }
 
         [HttpPut]
-
         public ActionResult<Pessoa> Update(long id, string nome, string telefone, Sexo sexo)
         {
             var pessoa = context.Pessoas.FirstOrDefault(p => p.Id == id);

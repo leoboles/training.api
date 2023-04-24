@@ -17,14 +17,12 @@ namespace training.api.Controllers
         }
 
         [HttpGet]
-
         public ActionResult<IEnumerable<Endereco>> GetAll()
         {
             return Ok(context.Enderecos);
         }
 
         [HttpPost]
-
         public ActionResult<Endereco> Create( string rua, string numero, string bairro, long idEstado, long idpessoa)
         {
             var endereco = new Endereco()
@@ -41,7 +39,6 @@ namespace training.api.Controllers
         }
 
         [HttpDelete]
-
         public ActionResult Delete(long id)
         {
             var endereco = context.Enderecos.FirstOrDefault(p => p.Id == id);
@@ -55,7 +52,6 @@ namespace training.api.Controllers
         }
 
         [HttpPut]
-
         public ActionResult<Endereco> Update(long id, string rua, string numero, string bairro, long idEstado, long idpessoa)
         {
             var endereco = context.Enderecos.FirstOrDefault(p => p.Id == id);

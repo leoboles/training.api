@@ -10,20 +10,20 @@ namespace training.api.Model
     public class ContaBancaria
     {
         [Key]
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
         public string Agencia { get; set; }
         public string Conta { get; set; }
         public float Saldo { get; set; }
         public long IdPessoa { get; set; }
-
         public long IdBanco { get; set; }
        
         public void Deposito(float valor)
         {
             if (valor <= 0)
             {
-                NotFound();
+                throw new InvalidOperationException("Não é permitido depósitos com valor negativo");
             }
             else 
              Saldo += valor;
@@ -33,23 +33,22 @@ namespace training.api.Model
         {       
             if (produto.Valor > Saldo)
             {
-                NotFound();
+                throw new InvalidOperationException("Não é permitido depósitos com valor negativo"); ;
             }
             else
                Saldo -= produto.Valor;
         }
 
-        private void NotFound()
-        {
-            throw new NotImplementedException();
-        }
-
         [ForeignKey(nameof(IdPessoa))]
+
         [JsonIgnore]
+
         public virtual Pessoa Pessoa { get; set; }
 
         [ForeignKey(nameof(IdBanco))]
+
         [JsonIgnore]
+
         public virtual Banco Banco { get; set; }
     }
 

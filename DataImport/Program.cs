@@ -40,14 +40,6 @@ namespace DateImport
                             string telefone = row.GetCell(1).StringCellValue;
                             string sexoStr = row.GetCell(2)?.ToString();
                             Sexo sexo;
-                            if (Enum.TryParse(sexoStr, out sexo))
-                            {
-                                // o valor da célula é um valor válido de Sexo
-                            }
-                            else
-                            {
-                                // o valor da célula não é um valor válido de Sexo
-                            }
                             pessoa = new Pessoa { Nome = nome, CPF = cpf, Telefone = telefone, Sexo = sexo };
                             context.Pessoas.Add(pessoa);
                         }
@@ -85,7 +77,8 @@ namespace DateImport
                         var banco = context.Bancos.FirstOrDefault(b => b.Name == bancoNome && b.Cidade.Nome == cidadeNome && b.Cidade.Estado.Sigla == siglaEstado);
                         if (banco == null)
                         {
-                            banco = new Banco { Name = bancoNome, Cidade = cidade }; context.Bancos.Add(banco);
+                            banco = new Banco { Name = bancoNome, Cidade = cidade };
+                            context.Bancos.Add(banco);
                         }
                         else
                         {
@@ -125,8 +118,6 @@ namespace DateImport
             workbook.Close();
         }
     }
-
-
 }
 
 

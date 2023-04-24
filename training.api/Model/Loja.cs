@@ -14,9 +14,5 @@ namespace training.api.Model
         public string Name { get; set; }
 
         public virtual ICollection<Produto> Produtos { get; set; }
-
-
-
-
     }
 }

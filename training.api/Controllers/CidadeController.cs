@@ -15,14 +15,12 @@ namespace training.api.Controllers
         }
 
         [HttpGet]
-
         public ActionResult<IEnumerable<Cidade>> GetAll()
         {
             return Ok(context.Cidades);
         }
 
         [HttpPost]
-
         public ActionResult<Cidade> Create(string nome, long idEstado)
         {
             var cidade = new Cidade()

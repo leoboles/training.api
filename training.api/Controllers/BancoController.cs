@@ -15,14 +15,12 @@ namespace training.api.Controllers
         }
 
         [HttpGet]
-
         public ActionResult<IEnumerable<Banco>> GetAll()
         {
             return Ok(context.Bancos);
         }
 
         [HttpPost]
-
         public ActionResult<Banco> Create(string nome, long idCidade)
         {
             var banco = new Banco()
@@ -37,7 +35,6 @@ namespace training.api.Controllers
 
 
         [HttpDelete]
-
         public ActionResult Delete(long id)
         {
             var banco = context.Bancos.FirstOrDefault(p => p.Id == id);

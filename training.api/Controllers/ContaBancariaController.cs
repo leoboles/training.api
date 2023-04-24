@@ -15,14 +15,12 @@ namespace training.api.Controllers
         }
 
         [HttpGet]
-
         public ActionResult<IEnumerable<ContaBancaria>> GetAll()
         {
             return Ok(context.ContaBancarias);
         }
 
         [HttpPost]
-
         public ActionResult<ContaBancaria> Create(string agencia, string conta, float saldoIncial, long idPessoa)
         {
             var contaBancaria = new ContaBancaria()
@@ -42,7 +40,6 @@ namespace training.api.Controllers
         }
 
         [HttpDelete]
-
         public ActionResult Delete(long id)
         {
             var contaBancaria= context.ContaBancarias.FirstOrDefault(p => p.Id == id);
@@ -56,7 +53,6 @@ namespace training.api.Controllers
         }
 
         [HttpPut("Deposito")]
-
         public ActionResult<ContaBancaria> Update(long id, float valor)
         {
             var contaBancaria = context.ContaBancarias.FirstOrDefault(p => p.Id == id);

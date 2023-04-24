@@ -24,5 +24,9 @@ namespace training.api.Model
 
         public DbSet<Cidade> Cidades { get; set; }
 
+        internal void SaveChanges()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

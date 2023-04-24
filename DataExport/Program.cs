@@ -55,7 +55,7 @@ namespace DateExport
                         row.CreateCell(2).SetCellValue(pessoa.Telefone);
                         row.CreateCell(3).SetCellValue(pessoa.Sexo.ToString());
 
-                        var endereco = enderecos.FirstOrDefault(e => e.IdPessoa == pessoa.Id);
+                        var endereco = pessoa.Enderecos.FirstOrDefault(e => e.IdPessoa == pessoa.Id);
                         if (endereco != null)
                         {
                             row.CreateCell(4).SetCellValue(endereco.Rua);
