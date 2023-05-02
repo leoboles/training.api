@@ -1,6 +1,6 @@
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using training.api.Model;
+using training.api.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,5 +40,7 @@ using (var context = new TrainingContext(options.Options))
 {
     context.Database.Migrate();
 }
+InputData inputdata = new InputData();
+inputdata.Importa(new TrainingContext(options.Options));
 
 app.Run();

@@ -8,7 +8,12 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\Class.cs" />
+    <Compile Remove="Controllers\DataInput.cs" />
     <Compile Remove="Controllers\EnderecoController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="dados.xlsx" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,7 +25,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="NPOI" Version="2.6.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

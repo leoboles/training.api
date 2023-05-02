@@ -1,23 +1,21 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace training.api.Model
 {
-    [Table("Pessoas")]
-    public class Pessoa
+    [Table("Cidades")]
+
+    public class Cidade
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
-
         public string Nome { get; set; }
+        public long IdEstado { get; set; }
 
-        public string Telefone { get; set; }
-
-        public Sexo Sexo { get; set; }
-
-        public string Cpf { get; set; }
-
-        public virtual ICollection<Endereco> Enderecos { get; set; }
+        [ForeignKey(nameof(IdEstado))]
+        [JsonIgnore]
+        public virtual Estado Estado { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace training.api.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Pessoa>> GetAll(string? nome = null, Sexo? sexo = null) 
+        public ActionResult<IEnumerable<Pessoa>> GetAll(string? nome = null, Sexo? sexo = null)
         {
             IQueryable<Pessoa> pessoas = context.Pessoas;
             if (nome != null)
@@ -28,17 +28,26 @@ namespace training.api.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Pessoa> AddPessoa(string nome, Sexo sexo, string? telefone = null)
+        public ActionResult<Pessoa> AddPessoa(string nome, Sexo sexo, string cpf, string? telefone = "S/Nº")
         {
-            Pessoa newPessoa = new Pessoa();
+            Pessoa? pessoa = context.Pessoas.Where(p => p.Cpf == cpf).FirstOrDefault();
+            if (pessoa == null)
+            {
+                Pessoa newPessoa = new Pessoa();
 
-            newPessoa.Nome = nome;
-            newPessoa.Sexo = sexo;
-            newPessoa.Telefone = telefone;
+                newPessoa.Nome = nome;
+                newPessoa.Sexo = sexo;
+                newPessoa.Telefone = telefone;
+                newPessoa.Cpf = cpf;
 
-            context.Pessoas.Add(newPessoa);
-            context.SaveChanges();
-            return Ok(newPessoa);
+                context.Pessoas.Add(newPessoa);
+                context.SaveChanges();
+                return Ok(newPessoa);
+            }
+            else
+            {
+                return Problem(cpf);
+            }
         }
 
         [HttpDelete("{id}")]
@@ -59,7 +68,7 @@ namespace training.api.Controllers
             }
         }
         [HttpPut("{id}")]
-        public ActionResult<Pessoa> UpdatePessoa(long id, string nome, Sexo sexo, string? telefone = null)
+        public ActionResult<Pessoa> UpdatePessoa(long id, string nome, Sexo sexo, string cpf,string? telefone = null)
         {
 
             Pessoa? pessoa = context.Pessoas.Where(p => p.Id == id).FirstOrDefault();
@@ -69,6 +78,7 @@ namespace training.api.Controllers
                 pessoa.Nome = nome;
                 pessoa.Sexo = sexo;
                 pessoa.Telefone = telefone;
+                pessoa.Cpf = cpf;
 
                 context.Pessoas.Update(pessoa);
                 context.SaveChanges();
