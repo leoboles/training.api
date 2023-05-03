@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Collections;
 using training.api.Model;
 
 namespace training.api.Controllers
@@ -14,10 +16,10 @@ namespace training.api.Controllers
             this.context = context;
         }
 
-        [HttpGet]
-        public ActionResult<IEnumerable<Pessoa>> GetAll(string? nome = null, Sexo? sexo = null)
+        [HttpGet("{nome},{sexo}")]
+        public ActionResult<IEnumerable<Pessoa>> GetByFiltering(string? nome = null, Sexo? sexo = null)
         {
-            IQueryable<Pessoa> pessoas = context.Pessoas;
+            IEnumerable<Pessoa> pessoas = context.Pessoas;
             if (nome != null)
                 pessoas = pessoas.Where(p => p.Nome.Contains(nome));
 
@@ -25,6 +27,12 @@ namespace training.api.Controllers
                 pessoas = pessoas.Where(p => p.Sexo == sexo);
 
             return Ok(pessoas);
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<Pessoa>> GetAll()
+        {
+            return Ok(context.Pessoas);
         }
 
         [HttpPost]
@@ -53,7 +61,6 @@ namespace training.api.Controllers
         [HttpDelete("{id}")]
         public ActionResult<Pessoa> DeletePessoa(long id)
         {
-
             Pessoa? pessoa = context.Pessoas.Where(p => p.Id == id).FirstOrDefault();
 
             if (pessoa != null)
@@ -67,10 +74,10 @@ namespace training.api.Controllers
                 return NotFound();
             }
         }
+         
         [HttpPut("{id}")]
-        public ActionResult<Pessoa> UpdatePessoa(long id, string nome, Sexo sexo, string cpf,string? telefone = null)
+        public ActionResult<Pessoa> UpdatePessoa(long id, string nome, Sexo sexo, string cpf, string? telefone = null)
         {
-
             Pessoa? pessoa = context.Pessoas.Where(p => p.Id == id).FirstOrDefault();
 
             if (pessoa != null)
@@ -89,6 +96,5 @@ namespace training.api.Controllers
                 return NotFound();
             }
         }
-
     }
 }

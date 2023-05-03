@@ -1,4 +1,5 @@
-﻿using NPOI.SS.UserModel;
+﻿using Microsoft.EntityFrameworkCore;
+using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using training.api.Controllers;
 using training.api.Model;
@@ -10,54 +11,59 @@ namespace training.api.Service
         private PessoasController pessoasController;
         private EnderecosController enderecosController;
 
-        public void Importa(TrainingContext context)
+        public void Importa()
         {
-            try
+            var options = new DbContextOptionsBuilder<TrainingContext>().UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=TrainingDb;Trusted_Connection=True;MultipleActiveResultSets=True").Options;
+
+            using (var context = new TrainingContext(options))
             {
-                this.pessoasController = new PessoasController(context);
-                this.enderecosController = new EnderecosController(context);
-
-                using (FileStream stream = new FileStream("D:\\Repos\\training.api\\training.api\\dados.xlsx", FileMode.Open, FileAccess.Read))
+                try
                 {
-                    XSSFWorkbook workbook = new XSSFWorkbook(stream);
-                    ISheet sheet = workbook.GetSheet("Sheet1");
+                    this.pessoasController = new PessoasController(context);
+                    this.enderecosController = new EnderecosController(context);
 
-                    for (int rowIndex = 1; rowIndex <= sheet.LastRowNum; rowIndex++)
+                    using (FileStream stream = new FileStream("D:\\Repos\\training.api\\training.api\\dados.xlsx", FileMode.Open, FileAccess.Read))
                     {
-                        IRow row = sheet.GetRow(rowIndex);
+                        XSSFWorkbook workbook = new XSSFWorkbook(stream);
+                        ISheet sheet = workbook.GetSheet("Sheet1");
 
-                        if (row != null)
+                        for (int rowIndex = 1; rowIndex <= sheet.LastRowNum; rowIndex++)
                         {
-                            string nome = row.GetCell(0).StringCellValue;
-                            string cpf = row.GetCell(1).StringCellValue;
-                            string estado = row.GetCell(2).StringCellValue;
-                            string cidade = row.GetCell(3).StringCellValue;
-                            string bairro = row.GetCell(4).StringCellValue;
-                            int numero = (int)row.GetCell(5).NumericCellValue;
-                            int tipoSexo = (int)row.GetCell(6).NumericCellValue;
-                            string rua = row.GetCell(7).StringCellValue;
+                            IRow row = sheet.GetRow(rowIndex);
 
-                            Sexo sexo;
-                            if (tipoSexo == 1)
+                            if (row != null)
                             {
-                                sexo = Sexo.Masculino;
-                            }
-                            else
-                            {
-                                sexo = Sexo.Feminino;
-                            }
+                                string nome = row.GetCell(0).StringCellValue;
+                                string cpf = row.GetCell(1).StringCellValue;
+                                string estado = row.GetCell(2).StringCellValue;
+                                string cidade = row.GetCell(3).StringCellValue;
+                                string bairro = row.GetCell(4).StringCellValue;
+                                int numero = (int)row.GetCell(5).NumericCellValue;
+                                int tipoSexo = (int)row.GetCell(6).NumericCellValue;
+                                string rua = row.GetCell(7).StringCellValue;
 
-                            this.pessoasController.AddPessoa(nome, sexo, cpf);
-                            long idPessoa = context.Pessoas.Where(p => p.Cpf == cpf).FirstOrDefault().Id;
-                            this.enderecosController.AddEndereco(idPessoa, rua, bairro, cidade, estado, numero.ToString());
+                                Sexo sexo;
+                                if (tipoSexo == 1)
+                                {
+                                    sexo = Sexo.Masculino;
+                                }
+                                else
+                                {
+                                    sexo = Sexo.Feminino;
+                                }
+
+                                this.pessoasController.AddPessoa(nome, sexo, cpf);
+                                long idPessoa = context.Pessoas.Where(p => p.Cpf == cpf).FirstOrDefault().Id;
+                                this.enderecosController.AddEndereco(idPessoa, rua, bairro, cidade, estado, numero.ToString());
+                            }
                         }
                     }
+                    Console.WriteLine("Importação finalizada com sucesso!");
                 }
-                Console.WriteLine("Importação finalizada com sucesso!");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
         }
     }

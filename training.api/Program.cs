@@ -36,11 +36,17 @@ app.MapControllers();
 var options = new DbContextOptionsBuilder<TrainingContext>();
 options.UseSqlServer(app.Configuration.GetConnectionString("TrainingContext"));
 
-using (var context = new TrainingContext(options.Options))
+var context = new TrainingContext(options.Options);
+
+using (context)
 {
     context.Database.Migrate();
 }
 InputData inputdata = new InputData();
-inputdata.Importa(new TrainingContext(options.Options));
+OutputData outputdata = new OutputData();
+
+/*inputdata.Importa();*/
+
+outputdata.Exporta();
 
 app.Run();

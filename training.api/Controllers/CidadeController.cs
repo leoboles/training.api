@@ -3,8 +3,11 @@ using training.api.Model;
 
 namespace training.api.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class CidadeController : ControllerBase
     {
+
         private readonly TrainingContext context;
 
         public CidadeController(TrainingContext context)

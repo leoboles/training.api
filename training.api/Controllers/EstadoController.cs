@@ -3,6 +3,8 @@ using training.api.Model;
 
 namespace training.api.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class EstadoController : ControllerBase
     {
         private readonly TrainingContext context;
