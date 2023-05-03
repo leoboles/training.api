@@ -4,10 +4,9 @@ using training.api.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -45,7 +44,7 @@ using (context)
 InputData inputdata = new InputData();
 OutputData outputdata = new OutputData();
 
-/*inputdata.Importa();*/
+inputdata.Importa();
 
 outputdata.Exporta();
 
