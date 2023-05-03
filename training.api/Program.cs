@@ -1,6 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using training.api.Model;
+using training.api;
+using Microsoft.AspNetCore.Components.Forms;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,4 +43,12 @@ using (var context = new TrainingContext(options.Options))
     context.Database.Migrate();
 }
 
+ExcelService excelService = new ExcelService();
+excelService.ExportarDados();
+excelService.Importa(new TrainingContext(options.Options));
+
 app.Run();
+
+
+
+

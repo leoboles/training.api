@@ -51,19 +51,59 @@ namespace training.api.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Endereco> CreateEndereco(string rua, string numero, string bairro, string estado, long idPessoa)
+        public ActionResult<Endereco> CreateEndereco(string rua, string numero, string bairro, string estado, long idPessoa, string cidade, string nomeEstado)
         {
-            var newEndereco = new Endereco
+            Estado? newEstado = context.Estados.Where(e => e.Sigla == estado).FirstOrDefault();
+            if (newEstado == null)
             {
-                Rua = rua,
-                Numero = numero,
-                Bairro = bairro,
-                Estado = estado,
-                IdPessoa = idPessoa
-            };
-            context.Enderecos.Add(newEndereco);
-            context.SaveChanges();
-            return Ok(newEndereco);
+                var estados = new Estado
+                {
+                    Sigla = estado,
+                    Nome = nomeEstado
+                };
+                context.Estados.Add(estados);
+                context.SaveChanges();
+                newEstado = estados;
+                return Ok(estados);
+            }
+
+            Cidade? newCidade = context.Cidades.Where(c => c.Nome == cidade && c.IdEstado == newEstado.Id).FirstOrDefault();
+            if (newCidade == null)
+            {
+                var cidades = new Cidade
+                {
+                    Nome = cidade,
+                    IdEstado = context.Estados.Where(e => e.Sigla == estado).FirstOrDefault().Id
+                };
+                context.Cidades.Add(cidades);
+                context.SaveChanges();
+                newCidade = cidades;
+                return Ok(cidades);
+            }
+
+            Pessoa? pessoa = context.Pessoas.Where(p => p.Id == idPessoa).FirstOrDefault();
+            if (pessoa != null)
+            {
+
+                var newEndereco = new Endereco
+                {
+                    Rua = rua,
+                    Numero = numero,
+                    Bairro = bairro,
+                    Estado = estado,
+                    IdPessoa = idPessoa,
+                    IdCidade = newCidade.Id,
+                    Pessoa = pessoa
+
+                };
+                context.Enderecos.Add(newEndereco);
+                context.SaveChanges();
+                return Ok(newEndereco);
+            }
+            else
+            {
+                return NotFound(pessoa);
+            }
         }
         [HttpDelete]
         public void DeleteEndereco(long id)

@@ -18,6 +18,7 @@ namespace training.api.Controllers
         public ActionResult<IEnumerable<Pessoa>> GetAll(string? nome = null, Sexo? sexo = null)
         {
             IQueryable<Pessoa> pessoas = context.Pessoas;
+
             if(nome != null) {
                 pessoas = pessoas.Where(x => x.Nome.Contains(nome));
             }
@@ -29,7 +30,7 @@ namespace training.api.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<IEnumerable<Pessoa>> GetById(long id)
+        public ActionResult<IEnumerable<Pessoa>> GetByIdPessoa(long id)
         {
             IQueryable<Pessoa> pessoas = context.Pessoas;
             if (id > 0)
@@ -40,13 +41,14 @@ namespace training.api.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Pessoa> CreatePessoa(Sexo sexo, string? nome = null, string? telefone = null)
+        public ActionResult<Pessoa> CreatePessoa(Sexo sexo, string nome, string telefone, string cpf)
         {
             var pessoa = new Pessoa
             {
                 Nome = nome,
                 Telefone = telefone,
-                Sexo = sexo
+                Sexo = sexo,
+                Cpf = cpf
             };
             context.Pessoas.Add(pessoa);
             context.SaveChanges();

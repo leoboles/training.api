@@ -24,5 +24,12 @@ namespace training.api.Model
         [ForeignKey(nameof(IdPessoa))]
         [JsonIgnore]
         public virtual Pessoa Pessoa { get; set; }
+
+
+        public long IdCidade { get; set; }
+        [ForeignKey(nameof(IdCidade))]
+        [JsonIgnore]
+
+        public virtual Cidade Cidade { get; set; }
     }
 }
