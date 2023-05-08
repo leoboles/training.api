@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20230508131916_Atualização.cs" />
+    <Compile Remove="Migrations\20230508131916_Atualização.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.4" />
     <PackageReference Include="microsoft.entityframeworkcore.proxies" Version="7.0.4" />
     <PackageReference Include="microsoft.entityframeworkcore.relational" Version="7.0.4" />

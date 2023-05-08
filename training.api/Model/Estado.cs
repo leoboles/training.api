@@ -11,7 +11,5 @@ namespace training.api.Model
         public long Id { get; set; }
 
         public string Sigla { get; set; }
-
-        public virtual ICollection<Cidade> Cidades { get; set; }
     }
 }

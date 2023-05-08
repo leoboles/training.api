@@ -114,6 +114,9 @@ namespace training.api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("IdCidade")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("IdEstado")
                         .HasColumnType("bigint");
 
@@ -130,7 +133,7 @@ namespace training.api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdEstado");
+                    b.HasIndex("IdCidade");
 
                     b.HasIndex("IdPessoa");
 
@@ -227,7 +230,7 @@ namespace training.api.Migrations
             modelBuilder.Entity("training.api.Model.Banco", b =>
                 {
                     b.HasOne("training.api.Model.Cidade", "Cidade")
-                        .WithMany("Bancos")
+                        .WithMany()
                         .HasForeignKey("IdCidade")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -238,7 +241,7 @@ namespace training.api.Migrations
             modelBuilder.Entity("training.api.Model.Cidade", b =>
                 {
                     b.HasOne("training.api.Model.Estado", "Estado")
-                        .WithMany("Cidades")
+                        .WithMany()
                         .HasForeignKey("IdEstado")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -267,9 +270,9 @@ namespace training.api.Migrations
 
             modelBuilder.Entity("training.api.Model.Endereco", b =>
                 {
-                    b.HasOne("training.api.Model.Estado", "Estado")
+                    b.HasOne("training.api.Model.Cidade", "Cidade")
                         .WithMany()
-                        .HasForeignKey("IdEstado")
+                        .HasForeignKey("IdCidade")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -279,7 +282,7 @@ namespace training.api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Estado");
+                    b.Navigation("Cidade");
 
                     b.Navigation("Pessoa");
                 });
@@ -298,16 +301,6 @@ namespace training.api.Migrations
             modelBuilder.Entity("training.api.Model.Banco", b =>
                 {
                     b.Navigation("ContaBancarias");
-                });
-
-            modelBuilder.Entity("training.api.Model.Cidade", b =>
-                {
-                    b.Navigation("Bancos");
-                });
-
-            modelBuilder.Entity("training.api.Model.Estado", b =>
-                {
-                    b.Navigation("Cidades");
                 });
 
             modelBuilder.Entity("training.api.Model.Loja", b =>

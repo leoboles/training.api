@@ -29,6 +29,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// global cors policy
+
+app.UseCors(x => x
+  .AllowAnyOrigin()
+  .AllowAnyMethod()
+  .AllowAnyHeader());
+
 app.UseAuthorization();
 
 app.MapControllers();

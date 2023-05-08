@@ -20,6 +20,5 @@ namespace training.api.Model
         [ForeignKey(nameof(IdLoja))]
         [JsonIgnore]
         public virtual Loja Loja { get; set; }
-
     }
 }

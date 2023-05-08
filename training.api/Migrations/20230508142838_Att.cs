@@ -5,29 +5,11 @@
 namespace training.api.Migrations
 {
     /// <inheritdoc />
-    public partial class Atualizacao : Migration
+    public partial class Att : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Estado",
-                table: "Enderecos");
-
-            migrationBuilder.AddColumn<string>(
-                name: "CPF",
-                table: "Pessoas",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<long>(
-                name: "IdEstado",
-                table: "Enderecos",
-                type: "bigint",
-                nullable: false,
-                defaultValue: 0L);
-
             migrationBuilder.CreateTable(
                 name: "Estados",
                 columns: table => new
@@ -52,6 +34,22 @@ namespace training.api.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Lojas", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Pessoas",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Telefone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Sexo = table.Column<int>(type: "int", nullable: false),
+                    CPF = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pessoas", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -116,6 +114,36 @@ namespace training.api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Enderecos",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Rua = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Numero = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Bairro = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IdEstado = table.Column<long>(type: "bigint", nullable: false),
+                    IdCidade = table.Column<long>(type: "bigint", nullable: false),
+                    IdPessoa = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Enderecos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Enderecos_Cidades_IdCidade",
+                        column: x => x.IdCidade,
+                        principalTable: "Cidades",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Enderecos_Pessoas_IdPessoa",
+                        column: x => x.IdPessoa,
+                        principalTable: "Pessoas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ContaBancarias",
                 columns: table => new
                 {
@@ -145,11 +173,6 @@ namespace training.api.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enderecos_IdEstado",
-                table: "Enderecos",
-                column: "IdEstado");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Bancos_IdCidade",
                 table: "Bancos",
                 column: "IdCidade");
@@ -170,34 +193,38 @@ namespace training.api.Migrations
                 column: "IdPessoa");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Enderecos_IdCidade",
+                table: "Enderecos",
+                column: "IdCidade");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Enderecos_IdPessoa",
+                table: "Enderecos",
+                column: "IdPessoa");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Produtos_IdLoja",
                 table: "Produtos",
                 column: "IdLoja");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Enderecos_Estados_IdEstado",
-                table: "Enderecos",
-                column: "IdEstado",
-                principalTable: "Estados",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Enderecos_Estados_IdEstado",
-                table: "Enderecos");
-
             migrationBuilder.DropTable(
                 name: "ContaBancarias");
+
+            migrationBuilder.DropTable(
+                name: "Enderecos");
 
             migrationBuilder.DropTable(
                 name: "Produtos");
 
             migrationBuilder.DropTable(
                 name: "Bancos");
+
+            migrationBuilder.DropTable(
+                name: "Pessoas");
 
             migrationBuilder.DropTable(
                 name: "Lojas");
@@ -207,25 +234,6 @@ namespace training.api.Migrations
 
             migrationBuilder.DropTable(
                 name: "Estados");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Enderecos_IdEstado",
-                table: "Enderecos");
-
-            migrationBuilder.DropColumn(
-                name: "CPF",
-                table: "Pessoas");
-
-            migrationBuilder.DropColumn(
-                name: "IdEstado",
-                table: "Enderecos");
-
-            migrationBuilder.AddColumn<string>(
-                name: "Estado",
-                table: "Enderecos",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
         }
     }
 }

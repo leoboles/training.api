@@ -19,8 +19,5 @@ namespace training.api.Model
         [ForeignKey(nameof(IdEstado))]
         [JsonIgnore]
         public virtual Estado Estado { get; set; }
-
-        public virtual ICollection<Banco> Bancos { get; set; }
-
     }
 }

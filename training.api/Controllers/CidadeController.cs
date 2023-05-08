@@ -63,6 +63,5 @@ namespace training.api.Controllers
             return Ok(cidade);
         }
 
-
     }
 }

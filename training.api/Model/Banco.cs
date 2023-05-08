@@ -21,6 +21,5 @@ namespace training.api.Model
         public virtual Cidade Cidade { get; set; }
 
         public virtual ICollection<ContaBancaria> ContaBancarias { get; set;}
-
     }
 }

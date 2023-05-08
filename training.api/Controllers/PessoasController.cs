@@ -24,15 +24,15 @@ namespace training.api.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(string nome, string telefone, Sexo sexo, string cpf)
+        public ActionResult <Pessoa> Create(string nome, string cpf, string telefone, Sexo sexo)
         {
-            Pessoa pessoa = new Pessoa();
+            var pessoa = new Pessoa
             {
-                pessoa.Nome = nome;
-                pessoa.Telefone = telefone;
-                pessoa.Sexo = sexo;
-                pessoa.CPF = cpf;          
-            }
+                Nome = nome.Trim(),
+                CPF = cpf.Trim(),
+                Telefone = telefone.Trim(),
+                Sexo = sexo,
+            };
             bool cpfExists = context.Pessoas.Any(p => p.CPF == cpf);
 
             if (Pessoa.ValidarCPF(cpf) == false)
@@ -49,7 +49,7 @@ namespace training.api.Controllers
             return CreatedAtAction(nameof(Create), new { id = pessoa.Id }, pessoa);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public ActionResult Delete(long id)
         {
             var pessoa = context.Pessoas.First(p => p.Id == id);
@@ -62,8 +62,8 @@ namespace training.api.Controllers
             return Ok("Você Excluiu a pessoa com Sucesso!!");
         }
 
-        [HttpPut]
-        public ActionResult<Pessoa> Update(long id, string nome, string telefone, Sexo sexo)
+        [HttpPut("{id}")]
+        public ActionResult<Pessoa> Update(long id, string nome, string cpf, string telefone, Sexo sexo)
         {
             var pessoa = context.Pessoas.FirstOrDefault(p => p.Id == id);
             if (pessoa == null)
@@ -71,7 +71,7 @@ namespace training.api.Controllers
                 return NotFound();
             }
             pessoa.Id = id;
-            pessoa.Nome = nome.Trim();
+            pessoa.Nome = nome.Trim().Trim();
             pessoa.Telefone = telefone.Trim();
             pessoa.Sexo = sexo;
             context.Update(pessoa);

@@ -17,7 +17,7 @@ namespace DateImport
             .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=TrainingDb;Trusted_Connection=True;MultipleActiveResultSets=True")
             .Options;
 
-            FileStream fileStream = new FileStream("C:/Users/leoo_/Downloads/ImportacaoDeDados.xlsx", FileMode.Open, FileAccess.Read);
+            FileStream fileStream = new FileStream("D:\\MEUS DOCUMENTOS\\Downloads\\ImportacaoDeDados.xlsx", FileMode.Open, FileAccess.Read);
 
             IWorkbook workbook = new XSSFWorkbook(fileStream);
 
@@ -40,7 +40,12 @@ namespace DateImport
                             string telefone = row.GetCell(1).StringCellValue;
                             string sexoStr = row.GetCell(2)?.ToString();
                             Sexo sexo;
-                            pessoa = new Pessoa { Nome = nome, CPF = cpf, Telefone = telefone, Sexo = sexo };
+                            Enum.TryParse(sexoStr, out sexo);
+                            pessoa = new Pessoa { 
+                                Nome = nome, 
+                                CPF = cpf, 
+                                Telefone = telefone, 
+                                Sexo = sexo };
                             context.Pessoas.Add(pessoa);
                         }
                         else
@@ -53,7 +58,9 @@ namespace DateImport
                             estado = context.Estados.FirstOrDefault(e => e.Sigla == sigla);
                             if (estado == null)
                             {
-                                estado = new Estado { Sigla = sigla };
+                                estado = new Estado { 
+                                    Sigla = sigla 
+                                };
                                 context.Estados.Add(estado);
                             }
                             siglaEstado = sigla;
@@ -66,7 +73,10 @@ namespace DateImport
                         var cidade = context.Cidades.FirstOrDefault(c => c.Nome == cidadeNome && c.Estado.Sigla == siglaEstado);
                         if (cidade == null)
                         {
-                            cidade = new Cidade { Nome = cidadeNome, Estado = estado };
+                            cidade = new Cidade { 
+                                Nome = cidadeNome, 
+                                Estado = estado 
+                            };
                             context.Cidades.Add(cidade);
                         }
                         else
@@ -90,7 +100,13 @@ namespace DateImport
                         var contaBancaria = context.ContaBancarias.FirstOrDefault(b => b.Agencia == agencia && b.Conta == conta);
                         if (contaBancaria == null)
                         {
-                            contaBancaria = new ContaBancaria { Agencia = agencia, Conta = conta, Saldo = saldo, Pessoa = pessoa, Banco = banco };
+                            contaBancaria = new ContaBancaria { 
+                                Agencia = agencia, 
+                                Conta = conta, 
+                                Saldo = saldo, 
+                                Pessoa = pessoa, 
+                                Banco = banco 
+                            };
                             context.ContaBancarias.Add(contaBancaria);
                         }
                         else
@@ -103,7 +119,14 @@ namespace DateImport
                         var endereco = context.Enderecos.FirstOrDefault(b => b.Rua == rua && b.Bairro == bairro);
                         if (endereco == null)
                         {
-                            endereco = new Endereco { Rua = rua, Numero = numero, Bairro = bairro, Pessoa = pessoa, Estado = estado };
+                            endereco = new Endereco {
+                                Rua = rua, 
+                                Numero = numero, 
+                                Bairro = bairro, 
+                                Pessoa = pessoa, 
+                                Estado = estado, 
+                                Cidade = cidade
+                            };
                             context.Enderecos.Add(endereco);
                         }
                         else

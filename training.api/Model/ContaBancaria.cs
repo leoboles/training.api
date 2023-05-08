@@ -17,8 +17,7 @@ namespace training.api.Model
         public string Conta { get; set; }
         public float Saldo { get; set; }
         public long IdPessoa { get; set; }
-        public long IdBanco { get; set; }
-       
+        public long IdBanco { get; set; }   
         public void Deposito(float valor)
         {
             if (valor <= 0)

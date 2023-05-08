@@ -77,8 +77,5 @@ namespace training.api.Model
         }
         public virtual ICollection<Endereco> Enderecos { get; set; }
         public virtual ICollection<ContaBancaria> ContaBancarias { get; set; }
-
-
-
     }
 }
