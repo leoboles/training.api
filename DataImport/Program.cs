@@ -15,7 +15,7 @@ namespace ExcelToSqlServer
             .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=TrainingDb;Trusted_Connection=True;MultipleActiveResultSets=True")
             .Options;
 
-            FileStream file = new FileStream("C:\\Users\\victo\\OneDrive\\Documentos\\ImportacaoDeDados.xlsx", FileMode.Open, FileAccess.Read);
+            FileStream file = new FileStream("C:\\Users\\VictorSouza\\OneDrive\\Documentos\\ImportacaoDeDados.xlsx", FileMode.Open, FileAccess.Read);
             XSSFWorkbook workbook = new XSSFWorkbook(file);
             ISheet sheet = workbook.GetSheetAt(0);
 
