@@ -33,6 +33,16 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// Global cors policy
+
+app.UseCors(x => x
+
+  .AllowAnyOrigin()
+
+  .AllowAnyMethod()
+
+  .AllowAnyHeader());
+
 var options = new DbContextOptionsBuilder<TrainingContext>();
 options.UseSqlServer(app.Configuration.GetConnectionString("TrainingContext"));
 

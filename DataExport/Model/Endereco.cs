@@ -19,6 +19,10 @@ namespace training.api.Model
 
         public long IdEstado { get; set; }
 
+        [ForeignKey(nameof(IdEstado))]
+        [JsonIgnore]
+        public virtual Estado Estado { get; set; }
+
         public long IdCidade { get; set; }
 
         [ForeignKey(nameof(IdCidade))]

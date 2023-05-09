@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using training.api.Model;
 
@@ -10,9 +11,11 @@ using training.api.Model;
 namespace training.api.Migrations
 {
     [DbContext(typeof(TrainingContext))]
-    partial class TrainingContextModelSnapshot : ModelSnapshot
+    [Migration("20230406165007_Compras")]
+    partial class Compras
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,50 +26,6 @@ namespace training.api.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("training.api.Model.Banco", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("IdCidade")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdCidade");
-
-                    b.ToTable("Bancos");
-                });
-
-            modelBuilder.Entity("training.api.Model.Cidade", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("IdEstado")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdEstado");
-
-                    b.ToTable("Cidades");
-                });
 
             modelBuilder.Entity("training.api.Model.ContaBancaria", b =>
                 {
@@ -84,9 +43,6 @@ namespace training.api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("IdBanco")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("IdPessoa")
                         .HasColumnType("bigint");
 
@@ -94,8 +50,6 @@ namespace training.api.Migrations
                         .HasColumnType("real");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IdBanco");
 
                     b.HasIndex("IdPessoa");
 
@@ -114,11 +68,9 @@ namespace training.api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("IdCidade")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("IdEstado")
-                        .HasColumnType("bigint");
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("IdPessoa")
                         .HasColumnType("bigint");
@@ -133,28 +85,9 @@ namespace training.api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdCidade");
-
                     b.HasIndex("IdPessoa");
 
                     b.ToTable("Enderecos");
-                });
-
-            modelBuilder.Entity("training.api.Model.Estado", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Sigla")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Estados");
                 });
 
             modelBuilder.Entity("training.api.Model.Loja", b =>
@@ -181,10 +114,6 @@ namespace training.api.Migrations
                         .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Cpf")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -222,67 +151,30 @@ namespace training.api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdLoja");
+                    b.HasIndex("IdLoja")
+                        .IsUnique();
 
                     b.ToTable("Produtos");
                 });
 
-            modelBuilder.Entity("training.api.Model.Banco", b =>
-                {
-                    b.HasOne("training.api.Model.Cidade", "Cidade")
-                        .WithMany()
-                        .HasForeignKey("IdCidade")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cidade");
-                });
-
-            modelBuilder.Entity("training.api.Model.Cidade", b =>
-                {
-                    b.HasOne("training.api.Model.Estado", "Estado")
-                        .WithMany()
-                        .HasForeignKey("IdEstado")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Estado");
-                });
-
             modelBuilder.Entity("training.api.Model.ContaBancaria", b =>
                 {
-                    b.HasOne("training.api.Model.Banco", "Banco")
-                        .WithMany()
-                        .HasForeignKey("IdBanco")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("training.api.Model.Pessoa", "Pessoa")
                         .WithMany("ContaBancaria")
                         .HasForeignKey("IdPessoa")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Banco");
-
                     b.Navigation("Pessoa");
                 });
 
             modelBuilder.Entity("training.api.Model.Endereco", b =>
                 {
-                    b.HasOne("training.api.Model.Cidade", "Cidade")
-                        .WithMany()
-                        .HasForeignKey("IdCidade")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("training.api.Model.Pessoa", "Pessoa")
                         .WithMany("Enderecos")
                         .HasForeignKey("IdPessoa")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Cidade");
 
                     b.Navigation("Pessoa");
                 });
@@ -290,12 +182,18 @@ namespace training.api.Migrations
             modelBuilder.Entity("training.api.Model.Produto", b =>
                 {
                     b.HasOne("training.api.Model.Loja", "Loja")
-                        .WithMany()
-                        .HasForeignKey("IdLoja")
+                        .WithOne("Produto")
+                        .HasForeignKey("training.api.Model.Produto", "IdLoja")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Loja");
+                });
+
+            modelBuilder.Entity("training.api.Model.Loja", b =>
+                {
+                    b.Navigation("Produto")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("training.api.Model.Pessoa", b =>

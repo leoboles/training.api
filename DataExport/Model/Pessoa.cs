@@ -18,6 +18,7 @@ namespace training.api.Model
         public Sexo Sexo { get; set; }
 
         public virtual ICollection<Endereco> Enderecos { get; set; }
+
         public virtual ICollection<ContaBancaria> ContaBancaria { get; set; }
 
         public static bool ValidarCPF(string cpf)
