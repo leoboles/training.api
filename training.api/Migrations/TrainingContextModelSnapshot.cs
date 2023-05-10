@@ -24,6 +24,28 @@ namespace training.api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("training.api.Model.Cidade", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("IdEstado")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdEstado");
+
+                    b.ToTable("Cidades");
+                });
+
             modelBuilder.Entity("training.api.Model.Endereco", b =>
                 {
                     b.Property<long>("Id")
@@ -33,10 +55,6 @@ namespace training.api.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Bairro")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Estado")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -51,11 +69,34 @@ namespace training.api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("idCidade")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IdPessoa");
 
+                    b.HasIndex("idCidade");
+
                     b.ToTable("Enderecos");
+                });
+
+            modelBuilder.Entity("training.api.Model.Estado", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("UF")
+                        .IsRequired()
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Estados");
                 });
 
             modelBuilder.Entity("training.api.Model.Pessoa", b =>
@@ -65,6 +106,10 @@ namespace training.api.Migrations
                         .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Cpf")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -82,6 +127,17 @@ namespace training.api.Migrations
                     b.ToTable("Pessoas");
                 });
 
+            modelBuilder.Entity("training.api.Model.Cidade", b =>
+                {
+                    b.HasOne("training.api.Model.Estado", "Estado")
+                        .WithMany("Cidades")
+                        .HasForeignKey("IdEstado")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Estado");
+                });
+
             modelBuilder.Entity("training.api.Model.Endereco", b =>
                 {
                     b.HasOne("training.api.Model.Pessoa", "Pessoa")
@@ -90,7 +146,20 @@ namespace training.api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("training.api.Model.Cidade", "Cidade")
+                        .WithMany()
+                        .HasForeignKey("idCidade")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cidade");
+
                     b.Navigation("Pessoa");
+                });
+
+            modelBuilder.Entity("training.api.Model.Estado", b =>
+                {
+                    b.Navigation("Cidades");
                 });
 
             modelBuilder.Entity("training.api.Model.Pessoa", b =>

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace training.api.Model
 {
@@ -16,11 +17,14 @@ namespace training.api.Model
 
         public string Bairro { get; set; }
 
-        public string Estado { get; set; }
-
+        public long idCidade { get; set; }
+        [ForeignKey(nameof(idCidade))]
+        [JsonIgnore]
+        public virtual Cidade Cidade { get; set; }
         public long IdPessoa { get; set; }
 
         [ForeignKey(nameof(IdPessoa))]
+        [JsonIgnore]
         public virtual Pessoa Pessoa { get; set; }
     }
 }

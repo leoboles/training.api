@@ -1,13 +1,12 @@
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using training.api.Model;
+using training.api.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -36,9 +35,17 @@ app.MapControllers();
 var options = new DbContextOptionsBuilder<TrainingContext>();
 options.UseSqlServer(app.Configuration.GetConnectionString("TrainingContext"));
 
-using (var context = new TrainingContext(options.Options))
+var context = new TrainingContext(options.Options);
+
+using (context)
 {
     context.Database.Migrate();
 }
+InputData inputdata = new InputData();
+OutputData outputdata = new OutputData();
+
+inputdata.Importa();
+
+outputdata.Exporta();
 
 app.Run();

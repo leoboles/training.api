@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Collections;
 using training.api.Model;
 
 namespace training.api.Controllers
@@ -14,10 +16,85 @@ namespace training.api.Controllers
             this.context = context;
         }
 
+        [HttpGet("{nome},{sexo}")]
+        public ActionResult<IEnumerable<Pessoa>> GetByFiltering(string? nome = null, Sexo? sexo = null)
+        {
+            IEnumerable<Pessoa> pessoas = context.Pessoas;
+            if (nome != null)
+                pessoas = pessoas.Where(p => p.Nome.Contains(nome));
+
+            if (sexo != null)
+                pessoas = pessoas.Where(p => p.Sexo == sexo);
+
+            return Ok(pessoas);
+        }
+
         [HttpGet]
         public ActionResult<IEnumerable<Pessoa>> GetAll()
         {
             return Ok(context.Pessoas);
+        }
+
+        [HttpPost]
+        public ActionResult<Pessoa> AddPessoa(string nome, Sexo sexo, string cpf, string? telefone = "S/Nº")
+        {
+            Pessoa? pessoa = context.Pessoas.Where(p => p.Cpf == cpf).FirstOrDefault();
+            if (pessoa == null)
+            {
+                Pessoa newPessoa = new Pessoa();
+
+                newPessoa.Nome = nome;
+                newPessoa.Sexo = sexo;
+                newPessoa.Telefone = telefone;
+                newPessoa.Cpf = cpf;
+
+                context.Pessoas.Add(newPessoa);
+                context.SaveChanges();
+                return Ok(newPessoa);
+            }
+            else
+            {
+                return Problem(cpf);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult<Pessoa> DeletePessoa(long id)
+        {
+            Pessoa? pessoa = context.Pessoas.Where(p => p.Id == id).FirstOrDefault();
+
+            if (pessoa != null)
+            {
+                context.Pessoas.Remove(pessoa);
+                context.SaveChanges();
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+         
+        [HttpPut("{id}")]
+        public ActionResult<Pessoa> UpdatePessoa(long id, string nome, Sexo sexo, string cpf, string? telefone = null)
+        {
+            Pessoa? pessoa = context.Pessoas.Where(p => p.Id == id).FirstOrDefault();
+
+            if (pessoa != null)
+            {
+                pessoa.Nome = nome;
+                pessoa.Sexo = sexo;
+                pessoa.Telefone = telefone;
+                pessoa.Cpf = cpf;
+
+                context.Pessoas.Update(pessoa);
+                context.SaveChanges();
+                return Ok(pessoa);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
     }
 }
