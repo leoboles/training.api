@@ -39,6 +39,7 @@ namespace training.api.Controllers
             }
             return Ok(enderecos);
         }
+
         [HttpGet("{idPessoa}")]
         public ActionResult<IEnumerable<Endereco>> GetEnderecoByIdPessoa(long idPessoa)
         {
@@ -64,7 +65,6 @@ namespace training.api.Controllers
                 context.Estados.Add(estados);
                 context.SaveChanges();
                 newEstado = estados;
-                return Ok(estados);
             }
 
             Cidade? newCidade = context.Cidades.Where(c => c.Nome == cidade && c.IdEstado == newEstado.Id).FirstOrDefault();
@@ -78,7 +78,6 @@ namespace training.api.Controllers
                 context.Cidades.Add(cidades);
                 context.SaveChanges();
                 newCidade = cidades;
-                return Ok(cidades);
             }
 
             Pessoa? pessoa = context.Pessoas.Where(p => p.Id == idPessoa).FirstOrDefault();
@@ -105,6 +104,7 @@ namespace training.api.Controllers
                 return NotFound(pessoa);
             }
         }
+
         [HttpDelete]
         public void DeleteEndereco(long id)
         {
@@ -128,6 +128,10 @@ namespace training.api.Controllers
                 enderecoUpdate.Bairro = bairro;
                 context.Enderecos.Update(enderecoUpdate);
                 context.SaveChanges();
+            }
+            else
+            {
+                return NotFound();
             }
             return Ok(enderecoUpdate);
         }

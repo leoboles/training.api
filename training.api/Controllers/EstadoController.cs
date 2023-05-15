@@ -25,25 +25,41 @@ namespace training.api.Controllers
         [HttpPost]
         public ActionResult<Estado> CreateEstado(string nome, string sigla)
         {
-            var estado = new Estado
+            Estado? newEstado = context.Estados.Where(e => e.Sigla == sigla).FirstOrDefault();
+            if(newEstado == null)
             {
-                Nome = nome,
-                Sigla = sigla
-            };
-            context.Estados.Add(estado);
-            context.SaveChanges();
-            return Ok(estado);
+                var estado = new Estado
+                {
+                    Nome = nome,
+                    Sigla = sigla
+                };
+                context.Estados.Add(estado);
+                context.SaveChanges();
+                return Ok(estado);
+            }
+            else
+            {
+                return BadRequest("");
+            }
+
         }
+
         [HttpDelete("{Id}")]
-        public void DeleteEstado(long id)
+        public ActionResult<Estado> DeleteEstado(long id)
         {
             var estadoDelete = context.Estados.Find(id);
             if (estadoDelete != null)
             {
                 context.Estados.Remove(estadoDelete);
                 context.SaveChanges();
+                return Ok(estadoDelete);
+            }
+            else
+            {
+                return NotFound();
             }
         }
+
         [HttpPut("{Id}")]
         public ActionResult<Estado> UpdateEstado(long id, string nome, string sigla)
         {
@@ -54,6 +70,10 @@ namespace training.api.Controllers
                 estadoUpdate.Sigla = sigla;
                 context.Estados.Update(estadoUpdate);
                 context.SaveChanges();
+            }
+            else
+            {
+                return NotFound();
             }
             return Ok(estadoUpdate);
         }

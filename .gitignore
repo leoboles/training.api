@@ -350,3 +350,5 @@ MigrationBackup/
 .ionide/
 /training.api/ImportaDados.xlsx
 /training.api/ExportaDados.xlsx
+/training.api/View/index.html
+/training.api/View/exampleExtJS.js

@@ -35,7 +35,7 @@ namespace training.api.Controllers
             IQueryable<Pessoa> pessoas = context.Pessoas;
             if (id > 0)
             {
-                pessoas = pessoas.Where(x => x.Id == id);
+                pessoas = (IQueryable<Pessoa>)context.Pessoas.Where(p => p.Id == id).FirstOrDefault();
             }
             return Ok(pessoas);
         }
@@ -43,6 +43,11 @@ namespace training.api.Controllers
         [HttpPost]
         public ActionResult<Pessoa> CreatePessoa(Sexo sexo, string nome, string telefone, string cpf)
         {
+            Pessoa? people = context.Pessoas.Where(p => p.Cpf == cpf).FirstOrDefault();
+            if(people != null)
+            {
+                return BadRequest("Pessoa:" + people.Nome + ", já existe na base de dados!");
+            }
             var pessoa = new Pessoa
             {
                 Nome = nome,
@@ -54,16 +59,23 @@ namespace training.api.Controllers
             context.SaveChanges();
             return Ok(pessoa);
         }
+
         [HttpDelete]
-        public void DeletePessoa(long id)
+        public ActionResult<Pessoa> DeletePessoa(long id)
         {
             var pessoaDelete = context.Pessoas.Find(id);
             if(pessoaDelete != null)
             {
                 context.Pessoas.Remove(pessoaDelete);
                 context.SaveChanges();
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
             }
         }
+
         [HttpPut("{id}")]
         public ActionResult<Pessoa> UpdatePessoa(long id, string nome, string telefone, Sexo sexo)
         {
@@ -75,6 +87,10 @@ namespace training.api.Controllers
                 pessoaUpdate.Sexo = sexo;
                 context.Pessoas.Update(pessoaUpdate);
                 context.SaveChanges();
+            }
+            else
+            {
+                return NotFound();
             }
             return Ok(pessoaUpdate);
         }

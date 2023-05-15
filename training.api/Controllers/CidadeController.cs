@@ -37,7 +37,6 @@ namespace training.api.Controllers
                     context.Estados.Add(newEstado);
                     context.SaveChanges();
                     estados = newEstado;
-                    return Ok(newEstado);
                 }
                 var cidade = new Cidade
                 {
@@ -64,6 +63,7 @@ namespace training.api.Controllers
                 context.SaveChanges();
             }
         }
+
         [HttpPut("{id}")]
         public ActionResult<Cidade> UpdateCidade(long id, string estado, string nome)
         {
