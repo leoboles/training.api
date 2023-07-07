@@ -7,6 +7,7 @@ namespace training.api.Model
         public TrainingContext(DbContextOptions<TrainingContext> options) : base(options)
         {
         }
+
         public DbSet<Pessoa> Pessoas { get; set; }
 
         public DbSet<Endereco> Enderecos { get; set; }
@@ -22,5 +23,6 @@ namespace training.api.Model
         public DbSet<Estado> Estados { get; set; }
 
         public DbSet<Cidade> Cidades { get; set; }
+
     }
 }
